@@ -13,9 +13,7 @@ import javax.imageio.ImageReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Peter Abeles
@@ -23,22 +21,13 @@ import java.util.List;
 public class GenerateResultsForIPOL2018 {
     public static ImageRetrievalEvaluationData foo(List<String> all) {
         return new ImageRetrievalEvaluationData() {
-            @Override
-            public List<String> getTraining() {throw new RuntimeException("Bad");}
-
-            @Override
-            public List<String> getDataBase() {throw new RuntimeException("Bad");}
-
-            @Override
-            public List<String> getQuery() {return all;}
-
-            @Override
-            public boolean isMatch(int query, int dataset) {
+            @Override public List<String> getTraining() {throw new RuntimeException("Bad");}
+            @Override public List<String> getDataBase() {throw new RuntimeException("Bad");}
+            @Override public List<String> getQuery() {return all;}
+            @Override public boolean isMatch(int query, int dataset) {
                 return (query/4)==(dataset/4);
             }
-
-            @Override
-            public int getTotalMatches(int query) {
+            @Override public int getTotalMatches(int query) {
                 return 4;
             }
         };
@@ -69,29 +58,29 @@ public class GenerateResultsForIPOL2018 {
              PrintStream resultsDetailed = new PrintStream(new File(resultsDir,"results_detailed.txt"))) {
             try {
                 // Load file paths to all the images
-                List<String> ukbenchImages = UtilIO.listImages(new File(directoryData, "ukbench1000").getPath(), true);
+                List<String> ukbenchImages = UtilIO.listImages(new File(directoryData, "full").getPath(), true);
                 System.out.println("ukbench.size=" + ukbenchImages.size());
 
                 List<String> flickrImages = new ArrayList<>();
-//                File flickerDir = new File(new File(directoryData, "images").getPath());
-//                File[] children = flickerDir.listFiles();
-//                if (children == null)
-//                    throw new RuntimeException("No flicker directories");
-//                List<File> sorted = Arrays.asList(children);
-//                Collections.sort(sorted);
-//                for (File d : sorted) {
-//                    if (!d.isDirectory() || d.isHidden())
-//                        continue;
-//                    // All valid directories are numbers
-//                    try {
-//                        Integer.parseInt(d.getName());
-//                    } catch (Exception e) {
-//                        continue;
-//                    }
-//                    flickrImages.addAll(UtilIO.listImages(d.getAbsolutePath(), true));
-//                }
-//
-//                System.out.println("flicker.size=" + flickrImages.size());
+                File flickerDir = new File(new File(directoryData, "images").getPath());
+                File[] children = flickerDir.listFiles();
+                if (children == null)
+                    throw new RuntimeException("No flicker directories");
+                List<File> sorted = Arrays.asList(children);
+                Collections.sort(sorted);
+                for (File d : sorted) {
+                    if (!d.isDirectory() || d.isHidden())
+                        continue;
+                    // All valid directories are numbers
+                    try {
+                        Integer.parseInt(d.getName());
+                    } catch (Exception e) {
+                        continue;
+                    }
+                    flickrImages.addAll(UtilIO.listImages(d.getAbsolutePath(), true));
+                }
+
+                System.out.println("flicker.size=" + flickrImages.size());
 
                 ImageRecognitionUtils<GrayU8> utils = new ImageRecognitionUtils<>(ImageType.SB_U8);
                 utils.pathHome = new File("cbir_models");
