@@ -34,8 +34,6 @@ public class TuneImageRecognitionNister2006 {
     String pathToResults = ".";
     @Option(name = "--ConfigPath", usage = "Which config should it use as the baseline")
     String pathToConfig = "";
-    @Option(name = "--Name", usage = "What to name the directory results are stored in")
-    String name = "grid_tree";
 
     ConfigGeneratorGrid<ConfigImageRecognitionNister2006> generator;
 
@@ -59,7 +57,7 @@ public class TuneImageRecognitionNister2006 {
         ImageRetrievalEvaluationData ukbench = datasetUkBench1000();
         ImageRetrievalEvaluationData inria = datasetInria();
 
-        File directoryBase = new File(pathToResults, name);
+        File directoryBase = new File(pathToResults);
         BoofMiscOps.checkTrue(directoryBase.mkdirs());
         try {
             FileUtils.write(new File(directoryBase, "grid_settings.txt"), generator.toStringSettings(), StandardCharsets.UTF_8);
