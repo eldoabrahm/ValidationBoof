@@ -159,7 +159,11 @@ public class ImageRecognitionUtils<T extends ImageBase<T>> {
         }
 
         // Load the model without images
+        System.out.print("  loading model ");
+        long timeLoad0 = System.currentTimeMillis();
         ImageRecognition<T> database = RecognitionIO.loadNister2006(new File(directory, DB_NAME), imageType);
+        System.out.println((System.currentTimeMillis()-timeLoad0)/1000.0+" (s)");
+        ((ImageRecognitionNister2006<T,?>)database).getDatabaseN().setVerbose(System.out,null);
 
         ImageFileListIterator<T> iterator = new ImageFileListIterator<>(paths, imageType);
         imageReadFaults = 0;

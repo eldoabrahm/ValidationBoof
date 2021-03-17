@@ -46,10 +46,10 @@ public class GenerateResultsForIPOL2018 {
         var defaultModel = new ImageRecognitionUtils.ModelInfo("default");
         File resultsDir = new File("cbir_models/"+defaultModel.name);
         if (resultsDir.exists()) {
-            System.out.println("Please delete old results at "+resultsDir.getPath());
-            System.exit(1);
+            System.out.println("Directory already exists. Will attempt to resume. "+resultsDir.getAbsolutePath());
+        } else {
+            BoofMiscOps.checkTrue(resultsDir.mkdirs());
         }
-        BoofMiscOps.checkTrue(resultsDir.mkdirs());
 
         // Create the logs
         try (PrintStream outStream = new PrintStream(new File(resultsDir,"stdout_log.txt"));
